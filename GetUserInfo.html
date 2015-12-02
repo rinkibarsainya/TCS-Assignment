@@ -10,10 +10,9 @@
     <h3>Search by GitHub UserId</h3>
     <input type="text" id="userId"  />
     <input type="button" value="Search" onclick="find();" />
-    
-     <p id="UserInfo" />
-   
+    <p id="UserInfo" />
   </div>
+ <div id="divInfo"></div>
 
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
   <script>
@@ -23,16 +22,18 @@
     
 
     function find() {
+     $("ul").empty();
 
     var id = $('#userId').val();
   /*************Get User info by GitHub userid************************/
     $.getJSON(uri + '/' + id)
          .done(function (data) {
+           
             var items = [];
             items.push("<h3>"+"Git Hub User Information"+"</h3>");
             $.each( data, function( key, val ) {
   
-            var value="<b>"+key+ " : "+"<b>" +val;
+            var value=key + " : "+ val;
             items.push( "<li id='" + key + "'>" + value + "</li>" );
             });
  
@@ -49,7 +50,8 @@
         /*************Get Repos info by GitHub userid************************/ 
          $.getJSON(uri + '/' + id+ '/'+ 'repos')
           .done(function (data) {
-          
+            repo_items = [];
+         
           repo_items.push("<h3>"+"Git Hub Repository Information"+"</h3>");
           for(var i = 0; i < data.length; i++)
           {
@@ -57,12 +59,12 @@
 
               if(key1 == "owner")
               {
-                var val="<b>"+key1+ " : "+"<b>" +getOwnerInfo(item);
+                var val=key1+ " : "+ getOwnerInfo(item);
               
               } 
               else
               {
-               var val="<b>"+key1+ " : "+"<b>" +item;
+               var val=key1+ " : "+ item;
                repo_items.push( "<li id='" + key1 + "'>" + val + "</li>" );
              }
             });
@@ -84,11 +86,11 @@
 
     function getOwnerInfo(item)
     {
-       console.log("owner id :" +item.id + "owner login:"+item.login);
+       //console.log("owner id :" +item.id + "owner login:"+item.login);
                 var owner=[];
                   $.each( item, function( k, v ) {
   
-                var owner_val="owner -" + "<b>"+k+ " : "+"<b>" +v;
+                var owner_val="owner -" + k+ " : "+v;
                  repo_items.push( "<li id='" + k + "'>" + owner_val + "</li>" );
                });
 
