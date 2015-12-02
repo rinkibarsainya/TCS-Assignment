@@ -29,6 +29,7 @@
     $.getJSON(uri + '/' + id)
          .done(function (data) {
             var items = [];
+            items.push("<h3>"+"Git Hub User Information"+"</h3>");
             $.each( data, function( key, val ) {
   
             var value="<b>"+key+ " : "+"<b>" +val;
@@ -49,7 +50,7 @@
          $.getJSON(uri + '/' + id+ '/'+ 'repos')
           .done(function (data) {
           
-          
+          repo_items.push("<h3>"+"Git Hub Repository Information"+"</h3>");
           for(var i = 0; i < data.length; i++)
           {
            $.each(data[i], function (key1, item) {
