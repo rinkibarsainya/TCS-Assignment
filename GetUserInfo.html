@@ -23,7 +23,7 @@
 
     function find() {
      $("ul").empty();
-
+     $('#UserInfo').text("");
     var id = $('#userId').val();
   /*************Get User info by GitHub userid************************/
     $.getJSON(uri + '/' + id)
