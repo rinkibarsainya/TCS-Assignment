@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Get User Info App</title>
+</head>
+<body>
+
+ 
+  <div style="border:1px solid;padding-left:30px;width:500px;background-color:#d3d3d3">
+    <h3>Search by GitHub UserId</h3>
+    <input type="text" id="userId"  />
+    <input type="button" value="Search" onclick="find();" />
+    
+     <p id="UserInfo" />
+   
+  </div>
+
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+  <script>
+    var uri = 'https://api.github.com/users';
+    var repo_items = [];
+
+    
+
+    function find() {
+
+    var id = $('#userId').val();
+  /*************Get User info by GitHub userid************************/
+    $.getJSON(uri + '/' + id)
+         .done(function (data) {
+            var items = [];
+            $.each( data, function( key, val ) {
+  
+            var value="<b>"+key+ " : "+"<b>" +val;
+            items.push( "<li id='" + key + "'>" + value + "</li>" );
+            });
+ 
+            $( "<ul/>", {
+            
+            html: items.join( "" )
+            }).appendTo( "body" );
+
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#UserInfo').text('Error: ' + err);
+          });
+
+        /*************Get Repos info by GitHub userid************************/ 
+         $.getJSON(uri + '/' + id+ '/'+ 'repos')
+          .done(function (data) {
+          
+          
+          for(var i = 0; i < data.length; i++)
+          {
+           $.each(data[i], function (key1, item) {
+
+              if(key1 == "owner")
+              {
+                var val="<b>"+key1+ " : "+"<b>" +getOwnerInfo(item);
+              
+              } 
+              else
+              {
+               var val="<b>"+key1+ " : "+"<b>" +item;
+               repo_items.push( "<li id='" + key1 + "'>" + val + "</li>" );
+             }
+            });
+          }
+            $( "<ul/>", {
+            
+            html: repo_items.join( "")
+            }).appendTo( "body" );       
+
+          
+          })
+
+          .fail(function (jqXHR, textStatus, err) {
+
+            $('#UserInfo').text('Error: ' + err);
+
+          });
+    }
+
+    function getOwnerInfo(item)
+    {
+       console.log("owner id :" +item.id + "owner login:"+item.login);
+                var owner=[];
+                  $.each( item, function( k, v ) {
+  
+                var owner_val="owner -" + "<b>"+k+ " : "+"<b>" +v;
+                 repo_items.push( "<li id='" + k + "'>" + owner_val + "</li>" );
+               });
+
+    }
+  </script>
+</body>
+</html>
